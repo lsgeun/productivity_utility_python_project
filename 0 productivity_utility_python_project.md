@@ -12,11 +12,12 @@
 
 하지만, [create_folder_file_and_insert_sub_folder_and_md_file_in_folder_file.py](create_folder_file_and_insert_sub_folder_and_md_file_in_folder_file.py)에서는 경로가 바뀌더라도 기존의 쿼리를 사용하면 된다.
 
-# Folder
+# Directory
 ```dataview
 TABLE file.mday as 수정일, file.cday as 생성일, file.size as "파일 크기"
 WHERE
 	length(split(regexreplace(replace(file.folder, this.file.folder, ""), "^/", ""),  "/")) = 1
+	AND replace(file.folder, this.file.folder, "") != ""
 	AND startswith(file.name, "0 ")
 	AND startswith(file.folder, this.file.folder)
 	AND file.name != this.file.name
@@ -29,16 +30,16 @@ TABLE file.mday as 수정일, file.cday as 생성일, file.size as "파일 크�
 WHERE
 	file.folder = this.file.folder
 	AND file.name != this.file.name
-	AND !regexmatch(".* - (웹 클립|유튜브)$", file.name)
+	AND !regexmatch(".* - (웹 클립|유튜브|웹 문서)$", file.name)
 SORT file.mday DESC
 ```
 
-# Layer 0
+# Layer 0 File
 ```dataview
 TABLE file.mday as 수정일, file.cday as 생성일, file.size as "파일 크기"
 WHERE
 	file.folder = this.file.folder
 	AND file.name != this.file.name
-	AND regexmatch(".* - (웹 클립|유튜브)$", file.name)
+	AND regexmatch(".* - (웹 클립|유튜브|웹 문서)$", file.name)
 SORT file.mday DESC
 ```
